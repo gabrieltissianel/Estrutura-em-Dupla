@@ -4,7 +4,7 @@
 
 typedef struct Pessoa{
 	char nome[25]; // identificador do filme
-	char sexo;
+	char sexo[1];
 	float peso;
     float altura; //ano de produção
 	struct Pessoa *ante; //ponteiro para o filme anterior
@@ -18,18 +18,19 @@ typedef struct tipoLista {
 }TLista;
 
 //=== Assinatura das Funções =======================================
-TLista iniciar(TLista *L);
+TLista* iniciar();
 void criarPessoa(TLista *L);
 int excluir(TLista *L, char *nome);
 
 //=== Funções ======================================================
-TLista iniciar(TLista *L){
-    //A VARIAVEL TEM QUE SER INICIADA
-    /*TLista i;
-     * iniciar(&i)*/
+TLista* iniciar(){
+    //A VARIAVEL TEM QUE SER INICIADA 
+    TLista *L = (TLista *)malloc(sizeof(TLista));
     L->inicio = NULL;
 	L->fim = NULL;
 	L->total = 0;
+
+    return L;
 }
 
 //==================================================================
@@ -40,10 +41,12 @@ void criarPessoa(TLista *L){
    
    //VALORES PADROES
    //TEM QUE SER ALTERADO NO ARQUIVO PRINICIPAL
+   /*
    novo->nome[0] = 's';
    novo->sexo = 's';
    novo->peso = -1;
    novo->altura = -1;
+   */
    
    novo->ante = NULL;
    novo->prox = NULL;
