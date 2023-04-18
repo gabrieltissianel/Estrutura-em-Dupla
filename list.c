@@ -4,7 +4,7 @@
 
 typedef struct Pessoa{
 	char nome[25]; // identificador do filme
-	char sexo[1];
+	char sexo;
 	float peso;
     float altura; //ano de produção
 	struct Pessoa *ante; //ponteiro para o filme anterior
@@ -38,15 +38,6 @@ void criarPessoa(TLista *L){
    TPessoa *novo = (TPessoa *)malloc(sizeof(TPessoa));
    TPessoa *atual = L->fim;
    int inserido = 0;
-   
-   //VALORES PADROES
-   //TEM QUE SER ALTERADO NO ARQUIVO PRINICIPAL
-   /*
-   novo->nome[0] = 's';
-   novo->sexo = 's';
-   novo->peso = -1;
-   novo->altura = -1;
-   */
    
    novo->ante = NULL;
    novo->prox = NULL;
