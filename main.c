@@ -5,7 +5,7 @@ void limparBuffer();
 TPessoa *criarPessoa();
 
 int main(){
-    TLista *l 
+    TLista *l;
     iniciar(&l);
     int opcao;
     
