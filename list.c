@@ -3,34 +3,32 @@
 #include <string.h>
 
 typedef struct Pessoa{
-	char nome[25]; // identificador do filme
+	char nome[25]; // identificador da pessoa
 	char sexo;
 	float peso;
-    float altura; //ano de produção
-	struct Pessoa *ante; //ponteiro para o filme anterior
+    float altura; //ano de produï¿½ï¿½o
+	struct Pessoa *ante; //ponteiro para a pessoa anterior
 	struct Pessoa *prox;
 }TPessoa;
 
 typedef struct tipoLista {
 	TPessoa *inicio;
 	TPessoa *fim;
-	int total; //quantidade de filmes na lista
+	int total; //quantidade de pessoas na lista
 }TLista;
 
-//=== Assinatura das Funções =======================================
-TLista* iniciar();
+//=== Assinatura das Funï¿½ï¿½es =======================================
+void iniciar(TLista *L);
 void criarPessoa(TLista *L);
 int excluir(TLista *L, char *nome);
 
-//=== Funções ======================================================
-TLista* iniciar(){
+//=== Funï¿½ï¿½es ======================================================
+void iniciar(TLista *L){
     //A VARIAVEL TEM QUE SER INICIADA 
-    TLista *L = (TLista *)malloc(sizeof(TLista));
+    L = (TLista *)malloc(sizeof(TLista));
     L->inicio = NULL;
 	L->fim = NULL;
 	L->total = 0;
-
-    return L;
 }
 
 //==================================================================
@@ -43,7 +41,7 @@ void criarPessoa(TLista *L){
    novo->prox = NULL;
    
    if(L->inicio == NULL){
-   	   //Lista está vazia...
+   	   //Lista estï¿½ vazia...
    	   L->inicio = novo;
    	   L->fim = novo;
    } else {
@@ -56,7 +54,7 @@ void criarPessoa(TLista *L){
 }
 
 //==================================================================
-//RETORNA UM VALOR DE CONFIRMACAO, 1 SE EXCLUIU E 0 SE NÃO EXCLUIU
+//RETORNA UM VALOR DE CONFIRMACAO, 1 SE EXCLUIU E 0 SE Nï¿½O EXCLUIU
 int excluir(TLista *L, char *nome){
    TPessoa *atual = L->inicio;
    TPessoa *anterior, *posterior;
@@ -64,31 +62,31 @@ int excluir(TLista *L, char *nome){
    
    do{
    	   if(strcmp(nome, atual->nome) == 0){
-   	   	  //Encontrado Registro a ser excluído...
+   	   	  //Encontrado Registro a ser excluï¿½do...
    	   	  anterior = atual->ante;
    	   	  posterior = atual->prox;
    	   	  
    	   	  if(posterior != NULL){
-   	   	    //O registro a ser excluído NÃO é o último da Lista.
+   	   	    //O registro a ser excluï¿½do Nï¿½O ï¿½ o ï¿½ltimo da Lista.
    	   	    posterior->ante = anterior;
 		  } else {
-		    //O registro a ser excluído é o último da Lista.
+		    //O registro a ser excluï¿½do ï¿½ o ï¿½ltimo da Lista.
 		    L->fim = anterior;
 		  }//if
 		  
 		  if(anterior != NULL){
-		     //O registro a ser excluído NÃO é o primeiro da Lista.
+		     //O registro a ser excluï¿½do Nï¿½O ï¿½ o primeiro da Lista.
 			 anterior->prox = posterior;	
 		  } else {
-		  	 //O registro a ser excluído é o primeiro da Lista.
+		  	 //O registro a ser excluï¿½do ï¿½ o primeiro da Lista.
 		     L->inicio = posterior;
 		  }//if
 		  
-		  free(atual); //Excluído registro apontado por atual.
+		  free(atual); //Excluï¿½do registro apontado por atual.
 		  
 		  excluido = 1;
 	   }else
-           atual = atual->prox;  //move atual para o próximo registro.
+           atual = atual->prox;  //move atual para o prï¿½ximo registro.
    }while((atual != NULL) && (excluido == 0));
    
    L->total--;
