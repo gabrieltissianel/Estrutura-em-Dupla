@@ -5,7 +5,7 @@ void limparBuffer();
 TPessoa *criarPessoa();
 
 int main(){
-    TLista *l;
+    TLista l;
     iniciar(&l);
     int opcao;
     
@@ -30,11 +30,6 @@ void menu(){
     printf("3 - Excluir Pessoa");
     printf("4 - Agrupar Pessoas");
     printf("5 - Exibir grupos");
-}
-
-int gerarAleatorio(int min, int max){
-    int num = (rand()% (max-min)) + min;
-    return num;
 }
 
 int gerarAleatorio(int min, int max){
