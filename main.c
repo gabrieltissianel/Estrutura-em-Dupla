@@ -1,24 +1,37 @@
 #include "list.c"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
+void menu();
+void limparBuffer();
 void inserir(TLista *f);
 
 int main(){
-    struct tipoLista ;
-    
     TLista *l = iniciar();
+    int opcao;
+    
+    do{
+        menu();
+        printf("Opcao: ");
+        scanf("%d",&opcao);
+        switch (opcao){
+            case 1: inserir(l); break;
+            case 2: listarPessoas(l); break;
+            case 3: excluir(l); break;
+            case 4: agrupar(l); break;
+            case 5: listarGrupos(l); break;
+        }
+    }while(opcao!=0);
+}
 
-    inserir(l);
-
-    inserir(l);
-
-    printf("%s\n", l->fim->nome);
-    printf("%s\n", l->inicio->nome);
-
-    excluir(l, "Joao");
-    printf("%s\n", l->fim->nome);
-    printf("%s\n", l->inicio->nome);
+void menu(){
+    printf("0 - Sair (Encerrar Aplicação)");
+    printf("1 - Inserir Dados de Nova Pessoa");
+    printf("2 - Listar Dados de Pessoas");
+    printf("3 - Excluir Pessoa");
+    printf("4 - Agrupar Pessoas");
+    printf("5 - Exibir grupos");
 }
 
 void limparBuffer() {
