@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <math.h>
 
 typedef struct Pessoa{
 	char nome[25]; // identificador da pessoa
@@ -19,7 +21,7 @@ typedef struct tipoLista {
 
 //=== Assinatura das Fun��es =======================================
 void iniciar(TLista *L);
-void criarPessoa(TLista *L);
+void inserirPessoa(TLista *L, TPessoa *pessoa);
 int excluir(TLista *L, char *nome);
 
 //=== Fun��es ======================================================
@@ -32,10 +34,9 @@ void iniciar(TLista *L){
 }
 
 //==================================================================
-void criarPessoa(TLista *L){
-   TPessoa *novo = (TPessoa *)malloc(sizeof(TPessoa));
+void inserirPessoa(TLista *L, TPessoa *novo){
+   
    TPessoa *atual = L->fim;
-   int inserido = 0;
    
    novo->ante = NULL;
    novo->prox = NULL;
