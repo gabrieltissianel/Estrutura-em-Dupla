@@ -1,13 +1,40 @@
 #include "list.c"
 
+void menu();
+void limparBuffer();
 TPessoa *criarPessoa();
 
 int main(){
-    struct tipoLista ;
-    
-    TLista l;
+    TLista *l 
     iniciar(&l);
+    int opcao;
     
+    do{
+        menu();
+        printf("Opcao: ");
+        scanf("%d",&opcao);
+        switch (opcao){
+            case 1: criarPessoa(); break;
+            //case 2: listarPessoas(l); break;
+            //case 3: excluir(l); break;
+            //case 4: agrupar(l); break;
+            //case 5: listarGrupos(l); break;
+        }
+    }while(opcao!=0);
+}
+
+void menu(){
+    printf("0 - Sair (Encerrar Aplicação)");
+    printf("1 - Inserir Dados de Nova Pessoa");
+    printf("2 - Listar Dados de Pessoas");
+    printf("3 - Excluir Pessoa");
+    printf("4 - Agrupar Pessoas");
+    printf("5 - Exibir grupos");
+}
+
+int gerarAleatorio(int min, int max){
+    int num = (rand()% (max-min)) + min;
+    return num;
 }
 
 int gerarAleatorio(int min, int max){
