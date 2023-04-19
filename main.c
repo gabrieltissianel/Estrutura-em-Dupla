@@ -16,11 +16,11 @@ int main(){
         printf("Opcao: ");
         scanf("%d",&opcao);
         switch (opcao){
-            case 1: inserir(l); break;
-            case 2: listarPessoas(l); break;
-            case 3: excluir(l); break;
-            case 4: agrupar(l); break;
-            case 5: listarGrupos(l); break;
+            case 1: criarPessoa(); break;
+            //case 2: listarPessoas(l); break;
+            //case 3: excluir(l); break;
+            //case 4: agrupar(l); break;
+            //case 5: listarGrupos(l); break;
         }
     }while(opcao!=0);
 }
