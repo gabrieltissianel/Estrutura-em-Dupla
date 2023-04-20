@@ -1,7 +1,11 @@
 #include "list.c"
 
+//Descricao das funcoes
 void menu();
 void limparBuffer();
+void alocarGrupos(int qtde_de_grupos, TLista *grupos);
+void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *l);
+int distanciaEuclidiana(TPessoa centroide, TPessoa pessoa);
 TPessoa *criarPessoa();
 
 int main(){
