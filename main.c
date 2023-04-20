@@ -32,11 +32,6 @@ void menu(){
     printf("\n5 - Exibir grupos");
 }
 
-int gerarAleatorio(int min, int max){
-    int num = (rand()% (max-min)) + min;
-    return num;
-}
-
 void limparBuffer() {
         int c;
         while ((c = getchar()) != '\n' && c != EOF){}
