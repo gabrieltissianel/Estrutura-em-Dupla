@@ -1,4 +1,4 @@
-#include "list.c"
+#include "list.h"
 
 //Descricao das funcoes===============================
 void menu();
