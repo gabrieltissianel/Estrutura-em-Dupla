@@ -9,7 +9,7 @@ int distanciaEuclidiana(TPessoa centroide, TPessoa pessoa);
 void adicionarPessoa(TLista *list, TPessoa *pessoa);
 TPessoa *criarPessoa();
 void listarPessoas(TLista list);
-
+void excluirPessoa(TLista *lista);
 
 int main(){
     TLista lista;
@@ -26,7 +26,7 @@ int main(){
                     adicionarPessoa(&lista, pessoa);
                     break;
             case 2: listarPessoas(lista); break;
-            //case 3: excluir(lista); break;
+            case 3: excluirPessoa(&lista); break;
             //case 4: agrupar(lista); break;
             //case 5: listarGrupos(lista); break;
         }
@@ -127,4 +127,18 @@ void listarPessoas(TLista list){
     limparBuffer();
     getchar();
 }
-//----------------}}}
+
+void excluirPessoa(TLista *lista){
+    char nome[NOME]; //NOME DEFINIDO NO ARQUIVO list.h
+    
+    printf("\nNome da pessoa: ");
+    scanf("%s[^\n]",nome);
+    limparBuffer();
+
+    int c = excluir(lista, nome);
+    if(c==0){printf("\n\nNão existe niguem com esse nome!");}
+    else{printf("\n\n%s Saiu da fila!",nome);}
+    
+    getchar();
+    system("clear");
+}
