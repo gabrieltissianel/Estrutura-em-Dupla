@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <math.h>
+#define NOME 25
 
 typedef struct Pessoa{
-	char nome[25]; // identificador da pessoa
+	char nome[NOME]; // identificador da pessoa
 	char sexo;
 	float peso;
     float altura; //ano de produ��o
