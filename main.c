@@ -4,8 +4,10 @@
 
 //Descricao das funcoes===============================
 void menu();
+int gerarAleatorio(int min, int max);
 void limparBuffer();
 void alocarGrupos(int qtde_de_grupos, TLista *grupos);
+void adicionarPessoa(TLista *list, TPessoa *pessoa);
 void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista);
 float distanciaEuclidiana(TPessoa centroide, TPessoa pessoa);
 void adicionarPessoa(TLista *list, TPessoa *pessoa);
@@ -14,6 +16,8 @@ void listarPessoas(TLista list);
 void excluirPessoa(TLista *lista);
 TLista *agrupar(TLista *lista);
 int gerarAleatorio(int min, int max);
+void listarGrupos(TLista *grupos); 
+
 
 int main(){
     TLista lista;
@@ -32,10 +36,12 @@ int main(){
                     break;
             case 2: listarPessoas(lista); break;
             case 3: excluirPessoa(&lista); break;
-            case 4: grupos = agrupar(&lista); break;
-            //case 5: listarGrupos(lista); break;
+            case 4: grupos = grupos=agrupar(&lista); break;
+            case 5: listarGrupos(grupos); break;
         }
     }while(opcao!=0);
+
+    return 0;
 }
 
 //FUNCOES------------------------------------------------{{{
@@ -64,6 +70,10 @@ void alocarGrupos(int qtde_de_grupos, TLista *grupos){
     }
 }
 
+void adicionarPessoa(TLista *list, TPessoa *pessoa){
+    inserirPessoa(list, pessoa);
+}
+
 int verificarSorteio(int *vetor, int tamanho_vetor, int valor){
     for (int i = 0; i < tamanho_vetor; i++){
         if (valor == vetor[i])
@@ -90,7 +100,7 @@ void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
         for (int j = 0; j < sorteado; j++){
             centroide = centroide->prox;
         }
-        inserirPessoa(&(grupos[i]), centroide);
+        adicionarPessoa(&(grupos[i]), centroide);
     }
 }
 
@@ -147,11 +157,6 @@ float distanciaEuclidiana(TPessoa centroide, TPessoa pessoa){
 }
 
 
-void adicionarPessoa(TLista *list, TPessoa *pessoa){
-    inserirPessoa(list, pessoa);
-}
-
-
 TPessoa *criarPessoa(){
     TPessoa *pessoa = (TPessoa*)malloc(sizeof(TPessoa));
 
@@ -199,6 +204,7 @@ int gerarAleatorio(int min, int max){
     int num = (rand()% (max-min)) + min;
     return num;
 }
+
 //----------------}}}
 void excluirPessoa(TLista *lista){
     char nome[NOME]; //NOME DEFINIDO NO ARQUIVO list.h
@@ -213,4 +219,33 @@ void excluirPessoa(TLista *lista){
     
     getchar();
     system("clear");
+}
+
+void listarGrupos(TLista *grupos){ 
+    limparBuffer();
+    if(!grupos){
+        printf("\n\nVoce tem que criar os grupos antes!");
+        getchar();
+        system("clear");
+        return;
+    }    
+    
+    system("clear");
+    int tamanho, i;
+    tamanho = sizeof(*grupos)/sizeof(TLista);
+    printf("\n\nTamanho %d", tamanho);
+
+    for(i=0;i<tamanho;i++){
+        printf("\n\nGrupo: %d", tamanho);
+        printf("\nNome\tSexo\tPeso\tAltura\n");
+        TPessoa *atual = grupos[i].inicio;
+        while(atual){
+            printf("%s\t",atual->nome);
+            printf("%c\t",atual->sexo);
+            printf("%0.2f\t",atual->peso);
+            printf("%0.2f\n",atual->altura);
+            atual = atual->prox;
+        }
+    }
+    getchar();
 }
