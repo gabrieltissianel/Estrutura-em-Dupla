@@ -59,13 +59,28 @@ void alocarGrupos(int qtde_de_grupos, TLista *grupos){
     }
 }
 
+int verificarSorteio(int *vetor, int tamanho_vetor, int valor){
+    for (int i = 0; i < tamanho_vetor; i++){
+        if (valor == vetor[i])
+            return 0;   
+    }
+    return 1;
+}
 
 void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
     alocarGrupos(qtde_de_grupos, grupos);
     int sorteado;
     TPessoa *centroide;
+    int sorteados[qtde_de_grupos];
+    int qtde_sorteados = 0;
+    int k = 0;
     for (int i = 0; i < qtde_de_grupos; i++){
-        //sorteado = gerarAleatorio(0, lista->total);
+        do{
+            sorteado = gerarAleatorio(0, qtde_de_grupos+1);
+        } while (!verificarSorteio(sorteados, qtde_sorteados, sorteado));
+
+        sorteados[qtde_sorteados++] = sorteado;
+
         centroide = lista->inicio;
         for (int j = 0; j < sorteado; j++){
             centroide = centroide->prox;
@@ -126,5 +141,10 @@ void listarPessoas(TLista list){
     }
     limparBuffer();
     getchar();
+}
+
+int gerarAleatorio(int min, int max){
+    int num = (rand()% (max-min)) + min;
+    return num;
 }
 //----------------}}}
