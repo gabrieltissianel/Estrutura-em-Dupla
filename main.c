@@ -85,7 +85,6 @@ void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
     TPessoa *centroide;
     int sorteados[qtde_de_grupos];
     int qtde_sorteados = 0;
-    int k = 0;
     for (int i = 0; i < qtde_de_grupos; i++){
         do{
             sorteado = gerarAleatorio(0, qtde_de_grupos+1);
@@ -161,14 +160,13 @@ void excluirPessoa(TLista *lista){
     
     printf("\nNome da pessoa: ");
     scanf("%s[^\n]",nome);
-    limparBuffer();
+   limparBuffer();
 
     int c = excluir(lista, nome);
     if(c==0){printf("\n\nNão existe niguem com esse nome!");}
     else{printf("\n\n%s Saiu da fila!",nome);}
     
     getchar();
-    system("clear");
 }
 
 void listarGrupos(TLista *grupos){ 
