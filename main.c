@@ -7,17 +7,20 @@ void menu();
 void limparBuffer();
 void alocarGrupos(int qtde_de_grupos, TLista *grupos);
 void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista);
-int distanciaEuclidiana(TPessoa centroide, TPessoa pessoa);
+float distanciaEuclidiana(TPessoa centroide, TPessoa pessoa);
 void adicionarPessoa(TLista *list, TPessoa *pessoa);
 TPessoa *criarPessoa();
 void listarPessoas(TLista list);
 void excluirPessoa(TLista *lista);
+TLista *agrupar(TLista *lista);
+int gerarAleatorio(int min, int max);
 
 int main(){
     TLista lista;
     iniciar(&lista);
     TPessoa *pessoa;
     int opcao;
+    TLista *grupos;
     
     do{
         menu();
@@ -29,7 +32,7 @@ int main(){
                     break;
             case 2: listarPessoas(lista); break;
             case 3: excluirPessoa(&lista); break;
-            //case 4: agrupar(lista); break;
+            case 4: grupos = agrupar(&lista); break;
             //case 5: listarGrupos(lista); break;
         }
     }while(opcao!=0);
@@ -92,7 +95,54 @@ void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
 }
 
 
-int distanciaEuclidiana(TPessoa centroide, TPessoa pessoa){
+TLista *agrupar(TLista *lista){
+    int qtde_grupos;
+    printf("Insira a quantidade de grupos: ");
+    scanf("%d", qtde_grupos);
+    TLista *grupos = (TLista*)malloc(qtde_grupos * sizeof(TLista));
+
+    sortearCentroides(qtde_grupos, grupos, lista);    
+    
+    TPessoa *atual = lista->inicio;
+    
+    float menor_valor = distanciaEuclidiana(*(grupos[0].inicio), *(atual));
+    int menor_indice = 0;
+    if (menor_valor == 0){
+        atual = atual->prox;
+        if (atual != NULL){
+            menor_valor = distanciaEuclidiana(*(grupos[1].inicio), *(atual));
+            menor_indice = 1;
+        }
+    }
+
+    float distancia_comparada;
+
+    while (atual != NULL){
+        for (int i = 1; i < qtde_grupos; i++){
+            distancia_comparada = distanciaEuclidiana(*(grupos[i].inicio), *atual);
+            if (distancia_comparada < menor_valor && distancia_comparada != 0){
+                menor_valor = distancia_comparada;
+                menor_indice = i;
+            }
+        }
+
+        inserirPessoa(&(grupos[menor_indice]), atual);
+
+        menor_valor = distanciaEuclidiana(*(grupos[0].inicio), *(atual));
+        menor_indice = 0;
+        if (menor_valor == 0){
+            atual = atual->prox;
+            if (atual != NULL){
+                menor_valor = distanciaEuclidiana(*(grupos[1].inicio), *(atual));
+                menor_indice = 1;
+            }
+        }
+    }
+    return grupos;
+}
+
+
+float distanciaEuclidiana(TPessoa centroide, TPessoa pessoa){
     return sqrt(pow(centroide.altura - pessoa.altura, 2) + pow(centroide.sexo - pessoa.sexo, 2) + pow(centroide.peso - centroide.peso, 2));
 }
 
