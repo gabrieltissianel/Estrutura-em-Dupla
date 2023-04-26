@@ -1,4 +1,6 @@
 #include "list.h"
+#include <time.h>
+
 
 //Descricao das funcoes===============================
 void menu();
