@@ -6,24 +6,23 @@
 void menu();
 int gerarAleatorio(int min, int max);
 void limparBuffer();
-void alocarGrupos(int qtde_de_grupos, TLista *grupos);
+void iniciarGrupos(int qtde_de_grupos, TLista *grupos);
 void adicionarPessoa(TLista *list, TPessoa *pessoa);
-void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista);
+int *sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista);
 float distanciaEuclidiana(TPessoa centroide, TPessoa pessoa);
+TPessoa *alocarPessoa();
 void adicionarPessoa(TLista *list, TPessoa *pessoa);
 TPessoa *criarPessoa();
 void listarPessoas(TLista list);
 void excluirPessoa(TLista *lista);
-TLista *agrupar(TLista *lista);
-int gerarAleatorio(int min, int max);
-void listarGrupos(TLista *grupos); 
-
+TLista *agrupar(TLista *lista, int *qtde_grupos);
+void listarGrupos(TLista *grupos,int tamanho); 
 
 int main(){
     TLista lista;
     iniciar(&lista);
     TPessoa *pessoa;
-    int opcao;
+    int opcao, tamanho;
     TLista *grupos;
     
     do{
@@ -36,8 +35,8 @@ int main(){
                     break;
             case 2: listarPessoas(lista); break;
             case 3: excluirPessoa(&lista); break;
-            case 4: grupos = grupos=agrupar(&lista); break;
-            case 5: listarGrupos(grupos); break;
+            case 4: grupos=agrupar(&lista, &tamanho); break;
+            case 5: listarGrupos(grupos,tamanho); break;
         }
     }while(opcao!=0);
 
@@ -62,8 +61,8 @@ void limparBuffer() {
 }
 
 
-void alocarGrupos(int qtde_de_grupos, TLista *grupos){
-    grupos = (TLista*)malloc(qtde_de_grupos * sizeof(TLista));
+void iniciarGrupos(int qtde_de_grupos, TLista *grupos){
+    //grupos = (TLista*)malloc(qtde_de_grupos * sizeof(TLista));
 
     for (int i = 0; i < qtde_de_grupos; i++){
         iniciar(&(grupos[i]));
@@ -74,44 +73,55 @@ void adicionarPessoa(TLista *list, TPessoa *pessoa){
     inserirPessoa(list, pessoa);
 }
 
-int verificarSorteio(int *vetor, int tamanho_vetor, int valor){
-    for (int i = 0; i < tamanho_vetor; i++){
-        if (valor == vetor[i])
-            return 0;   
-    }
-    return 1;
+int gerarAleatorio(int min, int max){
+    int num = (rand()% (max-min)) + min;
+    return num;
 }
 
-void sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
-    alocarGrupos(qtde_de_grupos, grupos);
-    int sorteado;
-    TPessoa *centroide;
-    int sorteados[qtde_de_grupos];
-    int qtde_sorteados = 0;
-    for (int i = 0; i < qtde_de_grupos; i++){
+int verificarSorteio(int *vetor, int tamanho_vetor, int valor){
+    int i=0;
+    while(i<tamanho_vetor && valor!=vetor[i]){i++;}
+    
+    if (i==tamanho_vetor)
+        return 1;   
+    else
+        return 0;
+}
+
+int *sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
+    iniciarGrupos(qtde_de_grupos, grupos);
+    int sorteado, i;
+    int *sorteados = (int*)malloc(qtde_de_grupos*sizeof(int));
+    TPessoa *centroide, *pessoa;
+    centroide = alocarPessoa();
+
+    for (i = 0; i < qtde_de_grupos; i++){
         do{
-            sorteado = gerarAleatorio(0, qtde_de_grupos+1);
-        } while (!verificarSorteio(sorteados, qtde_sorteados, sorteado));
-
-        sorteados[qtde_sorteados++] = sorteado;
-
-        centroide = lista->inicio;
-        for (int j = 0; j < sorteado; j++){
-            centroide = centroide->prox;
-        }
+            sorteado = gerarAleatorio(0, qtde_de_grupos);
+            printf("%d\n",sorteado);
+        } while (!verificarSorteio(sorteados, i, sorteado));
+        
+        sorteados[i] = sorteado;
+        pessoa = procurarPosicao(sorteado, lista);
+        printf("%s\n",pessoa->nome);
+        pessoacpy(centroide, pessoa);
         adicionarPessoa(&(grupos[i]), centroide);
     }
+    return sorteados;
 }
 
 
-TLista *agrupar(TLista *lista){
-    int qtde_grupos;
+TLista *agrupar(TLista *lista, int *qtde_grupos){
+    int *sorteados;
+    TLista *grupos;
+    
     printf("Insira a quantidade de grupos: ");
     scanf("%d", qtde_grupos);
-    TLista *grupos = (TLista*)malloc(qtde_grupos * sizeof(TLista));
+    grupos = (TLista*)malloc(*qtde_grupos * sizeof(TLista));
 
-    sortearCentroides(qtde_grupos, grupos, lista);    
-    
+    sorteados = sortearCentroides(*qtde_grupos, grupos, lista);    
+    listarGrupos(grupos, *qtde_grupos);
+
     TPessoa *atual = lista->inicio;
     
     float menor_valor = distanciaEuclidiana(*(grupos[0].inicio), *(atual));
@@ -127,7 +137,7 @@ TLista *agrupar(TLista *lista){
     float distancia_comparada;
 
     while (atual != NULL){
-        for (int i = 1; i < qtde_grupos; i++){
+        for (int i = 1; i < *qtde_grupos; i++){
             distancia_comparada = distanciaEuclidiana(*(grupos[i].inicio), *atual);
             if (distancia_comparada < menor_valor && distancia_comparada != 0){
                 menor_valor = distancia_comparada;
@@ -155,6 +165,10 @@ float distanciaEuclidiana(TPessoa centroide, TPessoa pessoa){
     return sqrt(pow(centroide.altura - pessoa.altura, 2) + pow(centroide.sexo - pessoa.sexo, 2) + pow(centroide.peso - centroide.peso, 2));
 }
 
+TPessoa *alocarPessoa(){
+    TPessoa *pessoa = (TPessoa*)malloc(sizeof(TPessoa));
+    return pessoa; 
+}
 
 TPessoa *criarPessoa(){
     TPessoa *pessoa = (TPessoa*)malloc(sizeof(TPessoa));
@@ -199,10 +213,6 @@ void listarPessoas(TLista list){
     getchar();
 }
 
-int gerarAleatorio(int min, int max){
-    int num = (rand()% (max-min)) + min;
-    return num;
-}
 
 //----------------}}}
 void excluirPessoa(TLista *lista){
@@ -219,7 +229,8 @@ void excluirPessoa(TLista *lista){
     getchar();
 }
 
-void listarGrupos(TLista *grupos){ 
+void listarGrupos(TLista *grupos, int tamanho){ 
+    int i;
     limparBuffer();
     if(!grupos){
         printf("\n\nVoce tem que criar os grupos antes!");
@@ -229,12 +240,9 @@ void listarGrupos(TLista *grupos){
     }    
     
     system("clear");
-    int tamanho, i;
-    tamanho = sizeof(*grupos)/sizeof(TLista);
-    printf("\n\nTamanho %d", tamanho);
 
     for(i=0;i<tamanho;i++){
-        printf("\n\nGrupo: %d", tamanho);
+        printf("\n\nGrupo: %d", i+1);
         printf("\nNome\tSexo\tPeso\tAltura\n");
         TPessoa *atual = grupos[i].inicio;
         while(atual){
