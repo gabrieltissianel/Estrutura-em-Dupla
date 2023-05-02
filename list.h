@@ -23,11 +23,13 @@ typedef struct tipoLista {
 void iniciar(TLista *L);
 void inserirPessoa(TLista *L, TPessoa *pessoa);
 int excluir(TLista *L, char *nome);
+TPessoa* procurarPosicao(int posicao, TLista *lista);
+void pessoacpy(TPessoa *copia, TPessoa *original);
 
 //=== Fun��es ======================================================
 void iniciar(TLista *L){
     //A VARIAVEL TEM QUE SER INICIADA 
-    L = (TLista *)malloc(sizeof(TLista));
+    //L = (TLista *)malloc(sizeof(TLista));
     L->inicio = NULL;
 	L->fim = NULL;
 	L->total = 0;
@@ -93,5 +95,24 @@ int excluir(TLista *L, char *nome){
    L->total--;
    return excluido;
 }
+//===================================================================
+//Procura uma pessoa pela sua posicao (valor inteiro) 
+TPessoa* procurarPosicao(int posicao, TLista *lista){
+    int i=0;
+    TPessoa *atual = lista->inicio;
+    while(i!=posicao){
+        i++;
+        atual = atual->prox;
+    }
+    return atual;
+}
+//===================================================================
 
+void pessoacpy(TPessoa *copia, TPessoa *original){
+    copia->nome[0]='\0';
+    strcpy(copia->nome, original->nome);
+    copia->sexo=original->sexo;
+    copia->peso=original->peso;
+    copia->altura=original->altura;
+}
 //===================================================================
