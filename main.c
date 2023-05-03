@@ -98,13 +98,11 @@ int *sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
     for (i = 0; i < qtde_de_grupos; i++){
         do{
             sorteado = gerarAleatorio(0, qtde_de_grupos);
-            printf("%d\n",sorteado);
         } while (!verificarSorteio(sorteados, i, sorteado));
         
         sorteados[i] = sorteado;
         pessoa = procurarPosicao(sorteado, lista);
-        printf("%s\n",pessoa->nome);
-        pessoacpy(centroide, pessoa);
+        centroide = pessoacpy(pessoa);
         adicionarPessoa(&(grupos[i]), centroide);
     }
     return sorteados;
@@ -119,9 +117,10 @@ TLista *agrupar(TLista *lista, int *qtde_grupos){
     scanf("%d", qtde_grupos);
     grupos = (TLista*)malloc(*qtde_grupos * sizeof(TLista));
 
-    sorteados = sortearCentroides(*qtde_grupos, grupos, lista);    
-    listarGrupos(grupos, *qtde_grupos);
-
+    sorteados = sortearCentroides(*qtde_grupos, grupos, lista);   
+    printf("%s\n",grupos[0].inicio->nome); 
+    printf("%s\n",grupos[1].inicio->nome);
+    
     TPessoa *atual = lista->inicio;
     
     float menor_valor = distanciaEuclidiana(*(grupos[0].inicio), *(atual));
