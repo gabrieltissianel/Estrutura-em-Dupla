@@ -24,7 +24,7 @@ void iniciar(TLista *L);
 void inserirPessoa(TLista *L, TPessoa *pessoa);
 int excluir(TLista *L, char *nome);
 TPessoa* procurarPosicao(int posicao, TLista *lista);
-void pessoacpy(TPessoa *copia, TPessoa *original);
+TPessoa *pessoacpy(TPessoa *original);
 
 //=== Fun��es ======================================================
 void iniciar(TLista *L){
@@ -108,11 +108,13 @@ TPessoa* procurarPosicao(int posicao, TLista *lista){
 }
 //===================================================================
 
-void pessoacpy(TPessoa *copia, TPessoa *original){
+TPessoa *pessoacpy(TPessoa *original){
+	TPessoa *copia = (TPessoa*)malloc(sizeof(TPessoa));
     copia->nome[0]='\0';
     strcpy(copia->nome, original->nome);
     copia->sexo=original->sexo;
     copia->peso=original->peso;
     copia->altura=original->altura;
+	return copia;
 }
 //===================================================================
