@@ -124,7 +124,7 @@ TLista *agrupar(TLista *lista, int *qtde_grupos){
     int *sorteados, indiceCentroide, i, e, verificar;
     float menorDistancia, distancia;
     TLista *grupos;
-    TPessoa *pessoa;
+    TPessoa *pessoa, *copiaPessoa;
     
     printf("Insira a quantidade de grupos: ");
     scanf("%d", qtde_grupos);
@@ -138,17 +138,18 @@ TLista *agrupar(TLista *lista, int *qtde_grupos){
         if(verificar)
         {//CONDICAO SE NAO ACHAR
             pessoa=procurarPosicao(i,lista);//REOTRNO UM PONTEIRO PARA A PESSOA DA RESPECTIVA POSICAO
+            copiaPessoa = pessoacpy(pessoa);//RETORNA UM PONTEIRO PARA UMA COPIA DA PESSOA
             menorDistancia=9999;
             for(e=0; e<*qtde_grupos; e++)
             {
-                distancia=distanciaEuclidiana(*grupos[e].inicio, *pessoa);
+                distancia=distanciaEuclidiana(*grupos[e].inicio, *copiaPessoa);
 
                 if(distancia<menorDistancia){
                     indiceCentroide=e;
                     menorDistancia=distancia;
                 }
             }
-            adicionarPessoa(&grupos[indiceCentroide], pessoa);
+            adicionarPessoa(&grupos[indiceCentroide], copiaPessoa);
         }
     }//for(if(for(if)))
 
