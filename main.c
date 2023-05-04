@@ -15,6 +15,7 @@ void adicionarPessoa(TLista *list, TPessoa *pessoa);
 TPessoa *criarPessoa();
 void listarPessoas(TLista list);
 void excluirPessoa(TLista *lista);
+int verificarCentroides(int *centroides, int quantidadeCentroides, int pessoa);
 TLista *agrupar(TLista *lista, int *qtde_grupos);
 void listarGrupos(TLista *grupos,int tamanho); 
 
@@ -102,60 +103,58 @@ int *sortearCentroides(int qtde_de_grupos, TLista *grupos, TLista *lista){
         
         sorteados[i] = sorteado;
         pessoa = procurarPosicao(sorteado, lista);
-        centroide = pessoacpy(pessoa);
+        centroide = pessoacpy(pessoa); //ESSA FUNCAO RETORNA UM PONTEIRO PARA UMA COPIA DA PESSOA
         adicionarPessoa(&(grupos[i]), centroide);
     }
     return sorteados;
 }
 
+//VERIFICA SE A POSICAO DA PESSOA NÃO É A MESMA DE ALGUM CENTROIDE
+//RETORNANDO 1 SE NAO TIVER E 0 SE TIVER
+int verificarCentroides(int *centroides, int quantidadeCentroides, int pessoa){
+    int i=0; 
+    while(i<quantidadeCentroides && centroides[i]!=pessoa){i++;}
+    if(i==quantidadeCentroides)
+        return 1;
+    else
+        return 0;
+}
 
 TLista *agrupar(TLista *lista, int *qtde_grupos){
-    int *sorteados;
+    int *sorteados, indiceCentroide, i, e, verificar;
+    float menorDistancia, distancia;
     TLista *grupos;
+    TPessoa *pessoa;
     
     printf("Insira a quantidade de grupos: ");
     scanf("%d", qtde_grupos);
     grupos = (TLista*)malloc(*qtde_grupos * sizeof(TLista));
 
     sorteados = sortearCentroides(*qtde_grupos, grupos, lista);   
-    printf("%s\n",grupos[0].inicio->nome); 
-    printf("%s\n",grupos[1].inicio->nome);
     
-    TPessoa *atual = lista->inicio;
-    
-    float menor_valor = distanciaEuclidiana(*(grupos[0].inicio), *(atual));
-    int menor_indice = 0;
-    if (menor_valor == 0){
-        atual = atual->prox;
-        if (atual != NULL){
-            menor_valor = distanciaEuclidiana(*(grupos[1].inicio), *(atual));
-            menor_indice = 1;
-        }
-    }
+    for(i=0; i < lista->total; i++)
+    {
+        verificar = verificarCentroides(sorteados, *qtde_grupos, i);//VERIFICO SE A PESSOA NA POSICAO i NAO É UM CENTROIDE
+        if(verificar)
+        {//CONDICAO SE NAO ACHAR
+            pessoa=procurarPosicao(i,lista);//REOTRNO UM PONTEIRO PARA A PESSOA DA RESPECTIVA POSICAO
+            menorDistancia=9999;
+            for(e=0; e<*qtde_grupos; e++)
+            {
+                distancia=distanciaEuclidiana(*grupos[e].inicio, *pessoa);
 
-    float distancia_comparada;
-
-    while (atual != NULL){
-        for (int i = 1; i < *qtde_grupos; i++){
-            distancia_comparada = distanciaEuclidiana(*(grupos[i].inicio), *atual);
-            if (distancia_comparada < menor_valor && distancia_comparada != 0){
-                menor_valor = distancia_comparada;
-                menor_indice = i;
+                if(distancia<menorDistancia){
+                    indiceCentroide=e;
+                    menorDistancia=distancia;
+                }
             }
+            adicionarPessoa(&grupos[indiceCentroide], pessoa);
         }
+    }//for(if(for(if)))
 
-        inserirPessoa(&(grupos[menor_indice]), atual);
-
-        menor_valor = distanciaEuclidiana(*(grupos[0].inicio), *(atual));
-        menor_indice = 0;
-        if (menor_valor == 0){
-            atual = atual->prox;
-            if (atual != NULL){
-                menor_valor = distanciaEuclidiana(*(grupos[1].inicio), *(atual));
-                menor_indice = 1;
-            }
-        }
-    }
+    limparBuffer();
+    printf("\nGrupos Criados!");
+    getchar();
     return grupos;
 }
 
@@ -219,10 +218,10 @@ void excluirPessoa(TLista *lista){
     
     printf("\nNome da pessoa: ");
     scanf("%s[^\n]",nome);
-   limparBuffer();
+    limparBuffer();
 
     int c = excluir(lista, nome);
-    if(c==0){printf("\n\nNão existe niguem com esse nome!");}
+    if(!c){printf("\n\nNão existe niguem com esse nome!");}
     else{printf("\n\n%s Saiu da fila!",nome);}
     
     getchar();
